@@ -49,4 +49,14 @@ public class HttpRequest {
     public void setHeaders(List<HttpHeader> headers) {
         this.headers = headers;
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "httpMethod='" + httpMethod + '\'' +
+                ", path='" + path + '\'' +
+                ", version='" + version + '\'' +
+                ", headers=" + headers +
+                '}';
+    }
 }

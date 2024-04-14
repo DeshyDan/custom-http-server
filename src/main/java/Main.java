@@ -1,22 +1,29 @@
+import connection.ConnectionHandler;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("Logs from your program will appear here!");
-
-        // Uncomment this block to pass the first stage
-        //
-        ServerSocket serverSocket = null;
-        Socket clientSocket = null;
 
         try {
-            serverSocket = new ServerSocket(4221);
+            ServerSocket serverSocket = new ServerSocket(4221);
             serverSocket.setReuseAddress(true);
-            clientSocket = serverSocket.accept(); // Wait for connection from client.
-            clientSocket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+
+            while (true) {
+                System.out.println("Waiting to accept a new connection");
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Accepted a new connection");
+                Thread t = new Thread(new ConnectionHandler(clientSocket));
+                t.start();
+            }
+
+
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }
