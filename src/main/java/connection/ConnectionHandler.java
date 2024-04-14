@@ -25,7 +25,7 @@ public class ConnectionHandler implements Runnable {
             InputStream in = socket.getInputStream();
             OutputStream out = socket.getOutputStream();
             HttpRequest httpRequest = HttpParser.parse(in);
-            System.out.println(httpRequest.toString());
+            System.out.println(httpRequest);
             byte[] response = response(httpRequest);
             out.write(response);
         } catch (IOException e) {

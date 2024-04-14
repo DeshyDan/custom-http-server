@@ -22,7 +22,7 @@ public class HttpParser {
         try {
             startLine = bufferedReader.readLine();
 
-            while (!(input = bufferedReader.readLine()).equalsIgnoreCase("")) {
+            while ((input = bufferedReader.readLine()) != null && !input.equalsIgnoreCase("")) {
                 headerLines.add(input);
             }
 

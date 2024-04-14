@@ -26,4 +26,12 @@ public class HttpHeader {
     public void setValues(List<String> values) {
         this.values = values;
     }
+
+    @Override
+    public String toString() {
+        return "HttpHeader{" +
+                "key='" + key + '\'' +
+                ", values=" + values +
+                '}';
+    }
 }
