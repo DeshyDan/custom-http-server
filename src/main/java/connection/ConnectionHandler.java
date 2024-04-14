@@ -44,7 +44,7 @@ public class ConnectionHandler implements Runnable {
         if (req.getPath().equals("/")) {
             response = "HTTP/1.1 200 OK\r\n\r\n";
         } else {
-            response = "HTTP/1.1 400 Not Found\r\n\r\n";
+            response = "HTTP/1.1 404 Not Found\r\n\r\n";
         }
         return response.getBytes(StandardCharsets.UTF_8);
     }
