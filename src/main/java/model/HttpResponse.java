@@ -11,14 +11,14 @@ public class HttpResponse {
         this.statusLine = statusLine;
         this.body = body;
         setContentLength(body);
-        setContentType(body);
+        setContentType();
     }
 
     public int getContentLength() {
         return contentLength;
     }
 
-    private void setContentType(Object body) {
+    private void setContentType() {
         contentType = "text/plain";
     }
 
@@ -33,9 +33,8 @@ public class HttpResponse {
         String lineBreak = "\r\n\r\n";
         return statusLine + lineBreak +
                 "Content-Type: " + contentType + lineBreak +
-                "Content-Length: " + contentLength +
-                lineBreak +
-                body+ lineBreak;
+                "Content-Length: " + contentLength + lineBreak +
+                body + lineBreak;
 
     }
 }
