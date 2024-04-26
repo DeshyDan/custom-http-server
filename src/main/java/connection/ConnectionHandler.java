@@ -2,6 +2,7 @@ package connection;
 
 
 import model.HttpRequest;
+import model.HttpResponse;
 import parser.HttpParser;
 
 import java.io.IOException;
@@ -40,12 +41,12 @@ public class ConnectionHandler implements Runnable {
     }
 
     public byte[] response(HttpRequest req) {
-        String response;
+        HttpResponse response;
         if (req.getPath().equals("/")) {
-            response = "HTTP/1.1 200 OK\r\n\r\n";
+            response = new HttpResponse("HTTP/1.1 200 OK","abc");
         } else {
-            response = "HTTP/1.1 404 Not Found\r\n\r\n";
+            response = new HttpResponse("HTTP/1.1 404 Not Found", "abc");
         }
-        return response.getBytes(StandardCharsets.UTF_8);
+        return response.toString().getBytes(StandardCharsets.UTF_8);
     }
 }
