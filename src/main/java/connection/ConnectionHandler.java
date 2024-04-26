@@ -42,11 +42,11 @@ public class ConnectionHandler implements Runnable {
 
     public byte[] response(HttpRequest req) {
         HttpResponse response;
-        if (req.getPath().equals("/")) {
+//        if (req.getPath().equals("/")) {
             response = new HttpResponse("HTTP/1.1 200 OK","abc");
-        } else {
-            response = new HttpResponse("HTTP/1.1 404 Not Found", "abc");
-        }
+//        } else {
+//            response = new HttpResponse("HTTP/1.1 404 Not Found", "abc");
+//        }
         return response.toString().getBytes(StandardCharsets.UTF_8);
     }
 }
