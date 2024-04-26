@@ -30,10 +30,11 @@ public class HttpResponse {
 
     @Override
     public String toString() {
-        String lineBreak = "\r\n\r\n";
+        String sectionBreak = "\r\n\r\n";
+        String lineBreak = "\r\n";
         return statusLine + lineBreak +
                 "Content-Type: " + contentType + lineBreak +
-                "Content-Length: " + contentLength + lineBreak +
+                "Content-Length: " + contentLength + sectionBreak +
                 body + lineBreak;
 
     }
