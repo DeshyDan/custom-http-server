@@ -1,6 +1,7 @@
 package connection;
 
 
+import model.HttpHeader;
 import model.HttpRequest;
 import model.HttpResponse;
 import parser.HttpParser;
@@ -45,10 +46,16 @@ public class ConnectionHandler implements Runnable {
         if (req.getPath().startsWith("/echo")) {
             String body = req.getPath().replace("/echo/", "");
             response = new HttpResponse("HTTP/1.1 200 OK", body);
-        } else if (req.getPath().equals("/")) {
+        }
+        else if (req.getPath().startsWith("/user-agent")){
+            HttpHeader userAgentHeader = req.getHeader("User-Agent");
+            String body = userAgentHeader.getValues().getFirst();
+            response = new HttpResponse("HTTP/1.1 200 OK", body);
+        }
+        else if (req.getPath().equals("/")) {
             response = new HttpResponse("HTTP/1.1 200 OK", "");
         } else {
-            response = new HttpResponse("HTTP/1.1 404 Not Found", "abc");
+            response = new HttpResponse("HTTP/1.1 404 Not Found", "Something went wrong");
         }
         return response.toString().getBytes(StandardCharsets.UTF_8);
     }

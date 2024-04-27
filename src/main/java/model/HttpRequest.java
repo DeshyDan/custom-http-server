@@ -9,7 +9,8 @@ public class HttpRequest {
     private String version;
     private List<HttpHeader> headers;
 
-    public HttpRequest(){}
+    public HttpRequest() {
+    }
 
     public HttpRequest(String httpMethod, String path, String version, List<HttpHeader> headers) {
         this.httpMethod = httpMethod;
@@ -44,6 +45,19 @@ public class HttpRequest {
 
     public List<HttpHeader> getHeaders() {
         return headers;
+    }
+
+    public HttpHeader getHeader(String headerName) {
+        HttpHeader resultHeader = new HttpHeader() ;
+        for (var i : headers) {
+            if (i.getKey().equals(headerName)){
+                resultHeader.setKey(i.getKey());
+                resultHeader.setValues(i.getValues());
+            }
+
+        }
+
+        return resultHeader;
     }
 
     public void setHeaders(List<HttpHeader> headers) {

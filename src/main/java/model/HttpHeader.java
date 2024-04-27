@@ -6,6 +6,9 @@ public class HttpHeader {
     private String key;
     private List<String> values;
 
+    public HttpHeader(){
+
+    }
     public HttpHeader(String key, List<String> values) {
         this.key = key;
         this.values = values;
