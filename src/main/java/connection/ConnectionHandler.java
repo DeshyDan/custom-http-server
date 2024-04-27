@@ -43,9 +43,10 @@ public class ConnectionHandler implements Runnable {
     public byte[] response(HttpRequest req) {
         HttpResponse response;
         if (req.getPath().startsWith("/echo")) {
-            response = new HttpResponse("HTTP/1.1 200 OK", "abc");
+            String body = req.getPath().replace("/echo/", "");
+            response = new HttpResponse("HTTP/1.1 200 OK", body);
         } else if (req.getPath().equals("/")) {
-            response = new HttpResponse("HTTP/1.1 200 OK", "abc");
+            response = new HttpResponse("HTTP/1.1 200 OK", "");
         } else {
             response = new HttpResponse("HTTP/1.1 404 Not Found", "abc");
         }
