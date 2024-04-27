@@ -35,7 +35,7 @@ public class HttpResponse {
         return statusLine + lineBreak +
                 "Content-Type: " + contentType + lineBreak +
                 "Content-Length: " + contentLength + sectionBreak +
-                body;
+                body + lineBreak;
 
     }
 }
