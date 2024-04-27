@@ -14,12 +14,14 @@ import java.util.List;
 public class HttpParser {
 
     public static HttpRequest parse(InputStream in) {
+//        TODO: Fix problem with the spacing being put in to the headers lists
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
         String input;
         List<String> headerLines = new ArrayList<>();
         String startLine;
         try {
+
             startLine = bufferedReader.readLine();
 
             while ((input = bufferedReader.readLine()) != null && !input.equalsIgnoreCase("")) {

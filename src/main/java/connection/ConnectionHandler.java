@@ -49,7 +49,7 @@ public class ConnectionHandler implements Runnable {
         }
         else if (req.getPath().startsWith("/user-agent")){
             HttpHeader userAgentHeader = req.getHeader("User-Agent");
-            String body = userAgentHeader.getValues().getFirst();
+            String body = userAgentHeader.getValues().getLast();
             response = new HttpResponse("HTTP/1.1 200 OK", body);
         }
         else if (req.getPath().equals("/")) {
