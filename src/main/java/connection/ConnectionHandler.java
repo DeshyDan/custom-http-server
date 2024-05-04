@@ -62,9 +62,9 @@ public class ConnectionHandler implements Runnable {
         } else if (req.getPath().startsWith("/files")) {
 
 
-//            TODO: Implement error handling
             String filepath = args[1];
             String fileName = req.getPath().substring(7);
+            //            TODO: Implement error handling
             File file = new File(filepath, fileName);
 
             if (file.exists()) {
@@ -88,8 +88,6 @@ public class ConnectionHandler implements Runnable {
                         .body("File not found ")
                         .contentType("text/plain")
                         .build();
-
-                System.out.println("Something went wrong");
             }
 
 
@@ -101,7 +99,7 @@ public class ConnectionHandler implements Runnable {
                     .build();
         } else {
             response = new HttpResponse.Builder()
-                    .statusLine(HttpStatus.OK.toString())
+                    .statusLine(HttpStatus.NOT_FOUND.toString())
                     .body("Something went wrong")
                     .contentType("text/plain")
                     .build();
