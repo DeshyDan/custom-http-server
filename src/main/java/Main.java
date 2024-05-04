@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class Main {
                 System.out.println("Waiting to accept a new connection");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted a new connection");
-                Thread t = new Thread(new ConnectionHandler(clientSocket));
+                Thread t = new Thread(new ConnectionHandler(clientSocket, args));
                 t.start();
             }
 

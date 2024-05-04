@@ -4,21 +4,22 @@ package connection;
 import model.HttpHeader;
 import model.HttpRequest;
 import model.HttpResponse;
+import model.HttpStatus;
 import parser.HttpParser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ConnectionHandler implements Runnable {
 
     private Socket socket;
+    private String[] args;
 
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler(Socket socket, String[] args) {
         this.socket = socket;
+        this.args = args;
     }
 
     @Override
@@ -41,21 +42,58 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    public byte[] response(HttpRequest req) {
+    public byte[] response(HttpRequest req) throws IOException {
         HttpResponse response;
         if (req.getPath().startsWith("/echo")) {
             String body = req.getPath().replace("/echo/", "");
-            response = new HttpResponse("HTTP/1.1 200 OK", body);
-        }
-        else if (req.getPath().startsWith("/user-agent")){
+            response = new HttpResponse.Builder()
+                    .statusLine(HttpStatus.OK.toString())
+                    .body(body)
+                    .contentType("text/plain")
+                    .build();
+        } else if (req.getPath().startsWith("/user-agent")) {
             HttpHeader userAgentHeader = req.getHeader("User-Agent");
             String body = userAgentHeader.getValues().getLast();
-            response = new HttpResponse("HTTP/1.1 200 OK", body);
-        }
-        else if (req.getPath().equals("/")) {
-            response = new HttpResponse("HTTP/1.1 200 OK", "");
+            response = new HttpResponse.Builder()
+                    .statusLine(HttpStatus.OK.toString())
+                    .body(body)
+                    .contentType("text/plain")
+                    .build();
+        } else if (req.getPath().equals("/file")) {
+            String filepath = args[1];
+            File file = new File(filepath);
+
+            if (file.exists()) {
+
+                    byte[] fileContent = new byte[(int) file.length()];
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    fileInputStream.read(fileContent);
+                    fileInputStream.close();
+                    String body = new String(fileContent, StandardCharsets.UTF_8);
+
+
+                    response = new HttpResponse.Builder()
+                            .statusLine(HttpStatus.OK.toString())
+                            .body(body)
+                            .contentType("application/octet-stream")
+                            .build();
+
+                }
+            }
+
+        } else if (req.getPath().equals("/")) {
+            response = new HttpResponse.Builder()
+                    .statusLine(HttpStatus.OK.toString())
+                    .body("")
+                    .contentType("text/plain")
+                    .build();
         } else {
-            response = new HttpResponse("HTTP/1.1 404 Not Found", "Something went wrong");
+            response = new HttpResponse.Builder()
+                    .statusLine(HttpStatus.OK.toString())
+                    .body("Something went wrong")
+                    .contentType("text/plain")
+                    .build();
+
         }
         return response.toString().getBytes(StandardCharsets.UTF_8);
     }
