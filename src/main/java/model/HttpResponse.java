@@ -1,8 +1,8 @@
 package model;
 
 public class HttpResponse {
-    private String statusLine;
-    private String body;
+    private final String statusLine;
+    private final String body;
     private String contentType;
     private int contentLength;
 
@@ -25,10 +25,6 @@ public class HttpResponse {
 
     public int getContentLength() {
         return contentLength;
-    }
-
-    private void setContentType(String type) {
-        contentType = type;
     }
 
     private void setContentLength(String body) {
@@ -60,7 +56,7 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder contentType(String body) {
+        public Builder contentType(String contentType) {
             this.contentType = contentType;
             return this;
         }
