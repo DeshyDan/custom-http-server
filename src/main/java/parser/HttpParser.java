@@ -63,7 +63,7 @@ public class HttpParser {
         for (String headerLine : headerLines) {
             try {
                 String key = headerLine.split(":")[0];
-                String value = headerLine.split(":")[1];
+                String value = headerLine.split(":")[1].trim();
 
                 List<String> valueList = List.of(value.split(" "));
 

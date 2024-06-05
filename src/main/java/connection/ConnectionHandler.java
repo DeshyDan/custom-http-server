@@ -10,6 +10,9 @@ import parser.HttpParser;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ConnectionHandler implements Runnable {
 
@@ -44,9 +47,51 @@ public class ConnectionHandler implements Runnable {
 
     public byte[] response(HttpRequest req) throws IOException {
         HttpResponse response;
+        switch (req.getHttpMethod()) {
+            case "GET":
+
+                response = getHandler(req);
+
+
+                break;
+
+            case "POST":
+                response = postHandler(req);
+                break;
+
+            default:
+                response = new HttpResponse.Builder()
+                        .statusLine("ASdf")
+                        .build();
+
+        }
+
+        return response.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    private HttpResponse postHandler(HttpRequest req) throws IOException {
+        Path directory = Paths.get(args[1]);
+        String fileName = req.getPath().substring(7);
+
+
+        Path directoryPath = Files.createDirectory(directory);
+
+        Path filepath = directoryPath.resolve(fileName);
+        try (FileWriter file = new FileWriter(filepath.toString())) {
+            file.write(req.getPath());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return new HttpResponse.Builder()
+                .statusLine("sdf")
+                .build();
+
+    }
+
+    private HttpResponse getHandler(HttpRequest req) throws IOException {
         if (req.getPath().startsWith("/echo")) {
             String body = req.getPath().replace("/echo/", "");
-            response = new HttpResponse.Builder()
+            return new HttpResponse.Builder()
                     .statusLine(HttpStatus.OK.toString())
                     .body(body)
                     .contentType("text/plain")
@@ -54,7 +99,7 @@ public class ConnectionHandler implements Runnable {
         } else if (req.getPath().startsWith("/user-agent")) {
             HttpHeader userAgentHeader = req.getHeader("User-Agent");
             String body = userAgentHeader.getValues().getLast();
-            response = new HttpResponse.Builder()
+            return new HttpResponse.Builder()
                     .statusLine(HttpStatus.OK.toString())
                     .body(body)
                     .contentType("text/plain")
@@ -76,14 +121,14 @@ public class ConnectionHandler implements Runnable {
                 String body = new String(fileContent, StandardCharsets.UTF_8);
 
 
-                response = new HttpResponse.Builder()
+                return new HttpResponse.Builder()
                         .statusLine(HttpStatus.OK.toString())
                         .body(body)
                         .contentType("application/octet-stream")
                         .build();
 
             } else {
-                response = new HttpResponse.Builder()
+                return new HttpResponse.Builder()
                         .statusLine(HttpStatus.NOT_FOUND.toString())
                         .body("File not found ")
                         .contentType("text/plain")
@@ -92,19 +137,20 @@ public class ConnectionHandler implements Runnable {
 
 
         } else if (req.getPath().equals("/")) {
-            response = new HttpResponse.Builder()
+            return new HttpResponse.Builder()
                     .statusLine(HttpStatus.OK.toString())
                     .body("")
                     .contentType("text/plain")
                     .build();
         } else {
-            response = new HttpResponse.Builder()
+            return new HttpResponse.Builder()
                     .statusLine(HttpStatus.NOT_FOUND.toString())
                     .body("Something went wrong")
                     .contentType("text/plain")
                     .build();
 
         }
-        return response.toString().getBytes(StandardCharsets.UTF_8);
+
+
     }
 }
