@@ -61,7 +61,8 @@ public class ConnectionHandler implements Runnable {
 
             default:
                 response = new HttpResponse.Builder()
-                        .statusLine("ASdf")
+                        .statusLine(HttpStatus.NOT_FOUND.toString())
+                        .body("")
                         .build();
 
         }
@@ -78,12 +79,14 @@ public class ConnectionHandler implements Runnable {
 
         Path filepath = directoryPath.resolve(fileName);
         try (FileWriter file = new FileWriter(filepath.toString())) {
-            file.write(req.getPath());
+            file.write(req.getBody());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
         return new HttpResponse.Builder()
-                .statusLine("sdf")
+                .statusLine(HttpStatus.OK.toString())
+                .contentType("application/octet-stream")
+                .body(req.getBody())
                 .build();
 
     }
@@ -122,7 +125,7 @@ public class ConnectionHandler implements Runnable {
 
 
                 return new HttpResponse.Builder()
-                        .statusLine(HttpStatus.OK.toString())
+                        .statusLine(HttpStatus.CREATED.toString())
                         .body(body)
                         .contentType("application/octet-stream")
                         .build();

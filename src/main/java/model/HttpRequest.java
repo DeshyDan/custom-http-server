@@ -7,6 +7,7 @@ public class HttpRequest {
     private String httpMethod;
     private String path;
     private String version;
+    private String body;
     private List<HttpHeader> headers;
 
     public HttpRequest() {
@@ -48,9 +49,9 @@ public class HttpRequest {
     }
 
     public HttpHeader getHeader(String headerName) {
-        HttpHeader resultHeader = new HttpHeader() ;
+        HttpHeader resultHeader = new HttpHeader();
         for (var i : headers) {
-            if (i.getKey().equals(headerName)){
+            if (i.getKey().equals(headerName)) {
                 resultHeader.setKey(i.getKey());
                 resultHeader.setValues(i.getValues());
             }
@@ -60,17 +61,26 @@ public class HttpRequest {
         return resultHeader;
     }
 
+
     public void setHeaders(List<HttpHeader> headers) {
         this.headers = headers;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getBody() {
+        return body;
     }
 
     @Override
     public String toString() {
         return "HttpRequest{" +
-                "httpMethod='" + httpMethod + '\'' +
-                ", path='" + path + '\'' +
-                ", version='" + version + '\'' +
-                ", headers=" + headers +
-                '}';
+                "httpMethod='" + httpMethod + '\''
+                + ", path='" + path + '\''
+                + ", version='" + version + '\''
+                + ", headers=" + headers + '\'' +
+                ", body=" + body + '}';
     }
 }

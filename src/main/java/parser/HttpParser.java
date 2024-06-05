@@ -14,25 +14,30 @@ import java.util.List;
 public class HttpParser {
 
     public static HttpRequest parse(InputStream in) {
-//        TODO: Fix problem with the spacing being put in to the headers lists
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
         String input;
         List<String> headerLines = new ArrayList<>();
         String startLine;
+        StringBuilder body = new StringBuilder();
         try {
 
             startLine = bufferedReader.readLine();
 
-            while ((input = bufferedReader.readLine()) != null && !input.equalsIgnoreCase("")) {
+            while ((input = bufferedReader.readLine()) != null && !input.isEmpty()) {
                 headerLines.add(input);
             }
-
+            while (bufferedReader.ready()) {
+                body.append((char) bufferedReader.read());
+            }
             HttpRequest request = parseStartLine(startLine);
 
             List<HttpHeader> headers = parseHeaders(headerLines);
 
             request.setHeaders(headers);
+
+
+            request.setBody(body.toString());
             return request;
         } catch (IOException | HttpParseException e) {
             throw new RuntimeException(e);
