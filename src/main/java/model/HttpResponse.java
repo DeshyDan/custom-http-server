@@ -4,6 +4,7 @@ public class HttpResponse {
     private final String statusLine;
     private final String body;
     private String contentType;
+    private String encodingType;
     private int contentLength;
 
 
@@ -18,6 +19,7 @@ public class HttpResponse {
         this.statusLine = builder.statusLine;
         this.body = builder.body;
         this.contentType = builder.contentType;
+        this.encodingType = builder.encodingType;
         setContentLength(body);
 
     }
@@ -33,18 +35,34 @@ public class HttpResponse {
 
     }
 
+    public String getEncodingType() {
+        return encodingType;
+    }
+
+    public void setEncodingType(String encodingType) {
+        this.encodingType = encodingType;
+    }
+
     @Override
     public String toString() {
         String sectionBreak = "\r\n\r\n";
         String lineBreak = "\r\n";
-        return statusLine + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak + body + lineBreak;
+        if (encodingType != null) {
+            return statusLine + lineBreak + "Content-Encoding: " + encodingType + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak + body + lineBreak;
+
+        } else {
+            return statusLine + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak + body + lineBreak;
+
+        }
 
     }
-//    TODO: Make this it's own class
+
+    //    TODO: Make this it's own class
     public static class Builder {
         private String statusLine;
         private String body;
         private String contentType;
+        private String encodingType;
 
         public Builder statusLine(String statusLine) {
             this.statusLine = statusLine;
@@ -58,6 +76,18 @@ public class HttpResponse {
 
         public Builder contentType(String contentType) {
             this.contentType = contentType;
+            return this;
+        }
+
+        public Builder encodingType(HttpHeader encodingType) {
+            if (encodingType.getKey() != null) {
+                String type = encodingType.getValues().getFirst();
+                if (type.equals("gzip")) {
+                    this.encodingType = type;
+                }
+            }
+
+
             return this;
         }
 

@@ -76,8 +76,8 @@ public class ConnectionHandler implements Runnable {
 
 
         if (!Files.exists(directory)) {
-        Files.createDirectories(directory);
-    }
+            Files.createDirectories(directory);
+        }
 
         Path filepath = directory.resolve(fileName);
         try (FileWriter file = new FileWriter(filepath.toString())) {
@@ -100,6 +100,7 @@ public class ConnectionHandler implements Runnable {
                     .statusLine(HttpStatus.OK.toString())
                     .body(body)
                     .contentType("text/plain")
+                    .encodingType(req.getHeader("Accept-Encoding"))
                     .build();
         } else if (req.getPath().startsWith("/user-agent")) {
             HttpHeader userAgentHeader = req.getHeader("User-Agent");
