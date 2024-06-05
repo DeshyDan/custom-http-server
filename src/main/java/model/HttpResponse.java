@@ -81,10 +81,12 @@ public class HttpResponse {
 
         public Builder encodingType(HttpHeader encodingType) {
             if (encodingType.getKey() != null) {
-                String type = encodingType.getValues().getFirst();
-                if (type.equals("gzip")) {
-                    this.encodingType = type;
+                for (String encoding : encodingType.getValues()){
+                    if (encoding.equals("gzip")) {
+                        this.encodingType = encoding;
+                    }
                 }
+
             }
 
 
