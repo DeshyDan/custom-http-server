@@ -75,16 +75,18 @@ public class ConnectionHandler implements Runnable {
         String fileName = req.getPath().substring(7);
 
 
-        Path directoryPath = Files.createDirectory(directory);
+        if (!Files.exists(directory)) {
+        Files.createDirectories(directory);
+    }
 
-        Path filepath = directoryPath.resolve(fileName);
+        Path filepath = directory.resolve(fileName);
         try (FileWriter file = new FileWriter(filepath.toString())) {
             file.write(req.getBody());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
         return new HttpResponse.Builder()
-                .statusLine(HttpStatus.OK.toString())
+                .statusLine(HttpStatus.CREATED.toString())
                 .contentType("application/octet-stream")
                 .body(req.getBody())
                 .build();
@@ -125,7 +127,7 @@ public class ConnectionHandler implements Runnable {
 
 
                 return new HttpResponse.Builder()
-                        .statusLine(HttpStatus.CREATED.toString())
+                        .statusLine(HttpStatus.OK.toString())
                         .body(body)
                         .contentType("application/octet-stream")
                         .build();
