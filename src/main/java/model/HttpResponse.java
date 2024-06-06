@@ -20,19 +20,28 @@ public class HttpResponse {
         this.body = builder.body;
         this.contentType = builder.contentType;
         this.encodingType = builder.encodingType;
-        setContentLength(body);
+        if (builder.contentLength > 0) {
+            setContentLength(builder.contentLength);
+        } else {
+            setContentLength(body);
+        }
+
 
     }
 
 
     public int getContentLength() {
-        return contentLength;
+        return this.contentLength;
     }
 
     private void setContentLength(String body) {
 
-        contentLength = body.length();
+        this.contentLength = body.length();
 
+    }
+
+    private void setContentLength(int length) {
+        this.contentLength = length;
     }
 
     public String getEncodingType() {
@@ -63,6 +72,7 @@ public class HttpResponse {
         private String body;
         private String contentType;
         private String encodingType;
+        private int contentLength;
 
         public Builder statusLine(String statusLine) {
             this.statusLine = statusLine;
@@ -79,9 +89,14 @@ public class HttpResponse {
             return this;
         }
 
+        public Builder contentLength(int contentLength) {
+            this.contentLength = contentLength;
+            return this;
+        }
+
         public Builder encodingType(HttpHeader encodingType) {
             if (encodingType.getKey() != null) {
-                for (String encoding : encodingType.getValues()){
+                for (String encoding : encodingType.getValues()) {
                     if (encoding.equals("gzip")) {
                         this.encodingType = encoding;
                     }
