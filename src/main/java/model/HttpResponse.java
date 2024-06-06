@@ -20,7 +20,7 @@ public class HttpResponse {
         this.body = builder.body;
         this.contentType = builder.contentType;
         this.encodingType = builder.encodingType;
-        if (builder.contentLength > 0) {
+        if (builder.contentLength > 0 && this.encodingType != null) {
             setContentLength(builder.contentLength);
         } else {
             setContentLength(body);
@@ -57,7 +57,8 @@ public class HttpResponse {
         String sectionBreak = "\r\n\r\n";
         String lineBreak = "\r\n";
         if (encodingType != null) {
-            return statusLine + lineBreak + "Content-Encoding: " + encodingType + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak + body + lineBreak;
+//            TODO: add missing body
+            return statusLine + lineBreak + "Content-Encoding: " + encodingType + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak;
 
         } else {
             return statusLine + lineBreak + "Content-Type: " + contentType + lineBreak + "Content-Length: " + contentLength + sectionBreak + body + lineBreak;

@@ -34,6 +34,7 @@ public class ConnectionHandler implements Runnable {
             HttpRequest httpRequest = HttpParser.parse(in);
             System.out.println(httpRequest);
             byte[] response = response(httpRequest);
+
             out.write(response);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,7 +55,11 @@ public class ConnectionHandler implements Runnable {
                 CompressedHttpResponse result = getHandler(req);
                 byte[] byteResponse = result.getResponse().toString().getBytes(StandardCharsets.UTF_8);
                 byte[] gzip = result.getByteArrayOutputStream().toByteArray();
-                ByteBuffer buffer = ByteBuffer.allocate(byteResponse.length + gzip.length);
+
+
+
+                byte[] combined = new byte[byteResponse.length + gzip.length];
+                ByteBuffer buffer = ByteBuffer.wrap(combined);
                 buffer.put(byteResponse);
                 buffer.put(gzip);
                 return buffer.array();
